@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#11130f" />
+  <title>FORGE — Sports Nutrition</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+    :root {
+      --ink: #171914;
+      --muted: #74766d;
+      --paper: #f5f5f0;
+      --white: #fff;
+      --lime: #d5ff45;
+      --line: #e7e8df;
+      --display: "Barlow Condensed", Impact, sans-serif;
+      --body: "DM Sans", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: var(--body);
+    }
+    button, a { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+
+    .announcement {
+      padding: 10px 20px;
+      color: var(--ink);
+      background: var(--lime);
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    header {
+      height: 76px;
+      padding: 0 6%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
+    }
+    .logo {
+      font: 900 33px/.9 var(--display);
+      letter-spacing: -.04em;
+    }
+    .logo span { color: #8aac12; }
+    nav { display: flex; gap: 32px; }
+    nav a {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    nav a:hover { color: #829e1c; }
+    .cart-button {
+      padding: 10px 15px;
+      border: 1px solid var(--ink);
+      background: transparent;
+      border-radius: 3px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .cart-button:hover { background: var(--ink); color: white; }
+
+    .hero {
+      min-height: 590px;
+      display: grid;
+      grid-template-columns: 1.03fr .97fr;
+      background: #171914;
+      color: white;
+      overflow: hidden;
+    }
+    .hero-copy {
+      padding: 82px 8% 75px 12%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+    }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 20px;
+      color: var(--lime);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 25px;
+      height: 2px;
+      background: currentColor;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      max-width: 570px;
+      margin-bottom: 22px;
+      font: 800 clamp(62px, 8vw, 112px)/.83 var(--display);
+      letter-spacing: -.025em;
+      text-transform: uppercase;
+    }
+    h1 span { color: var(--lime); }
+    .hero-copy > p:not(.eyebrow) {
+      max-width: 410px;
+      color: #c2c4ba;
+      font-size: 15px;
+      line-height: 1.75;
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      min-height: 50px;
+      padding: 0 23px;
+      border: 0;
+      border-radius: 2px;
+      background: var(--lime);
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      transition: transform .2s, background .2s;
+    }
+    .button:hover { transform: translateY(-2px); background: #e2ff78; }
+    .hero-art {
+      position: relative;
+      min-height: 590px;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 63% 44%, #566125 0, #30351c 24%, transparent 51%),
+        linear-gradient(135deg, #24271c, #141610 70%);
+    }
+    .hero-art::before {
+      content: "FORGE";
+      position: absolute;
+      top: 47%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-90deg);
+      color: rgba(255,255,255,.055);
+      font: 900 210px/.8 var(--display);
+      letter-spacing: -.06em;
+    }
+    .hero-art::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, #171914 0%, transparent 26%, transparent 78%, rgba(0,0,0,.16));
+      pointer-events: none;
+    }
+    .tub {
+      position: absolute;
+      z-index: 1;
+      left: 50%;
+      top: 51%;
+      width: 228px;
+      height: 325px;
+      transform: translate(-50%, -47%) rotate(5deg);
+      border-radius: 22px 22px 17px 17px;
+      background: linear-gradient(90deg, #22241c, #4a4d3d 18%, #33362a 77%, #1d1f19);
+      box-shadow: 30px 35px 55px #0009, inset 10px 0 12px #ffffff0a;
+    }
+    .tub-lid {
+      position: absolute;
+      top: -20px;
+      left: -5px;
+      width: calc(100% + 10px);
+      height: 30px;
+      border-radius: 8px 8px 4px 4px;
+      background: linear-gradient(#777b68, #34372c 45%, #25271f);
+      border-bottom: 2px solid #171914;
+    }
+    .tub-label {
+      position: absolute;
+      inset: 82px 0 45px;
+      padding: 20px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: var(--lime);
+      color: var(--ink);
+    }
+    .tub-label small {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .19em;
+    }
+    .tub-label strong {
+      margin: 8px 0 3px;
+      font: 900 45px/.85 var(--display);
+    }
+    .tub-label span {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .11em;
+    }
+    .tub-label em {
+      margin-top: 16px;
+      font-style: normal;
+      font-size: 8px;
+      font-weight: 700;
+    }
+    .hero-stamp {
+      position: absolute;
+      z-index: 2;
+      right: 9%;
+      bottom: 14%;
+      width: 104px;
+      height: 104px;
+      display: grid;
+      place-content: center;
+      border: 1px solid #ffffff77;
+      border-radius: 50%;
+      color: white;
+      text-align: center;
+      font: 700 12px/1.1 var(--display);
+      letter-spacing: .08em;
+      transform: rotate(12deg);
+    }
+
+    .trust-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 21px 6%;
+      background: var(--lime);
+      gap: 16px;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .trust-icon { font-size: 17px; }
+
+    .section {
+      padding: 88px 7%;
+    }
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 25px;
+      margin-bottom: 30px;
+    }
+    .section-heading .eyebrow { color: #829e1c; }
+    h2 {
+      margin-bottom: 0;
+      font: 800 clamp(42px, 6vw, 68px)/.9 var(--display);
+      letter-spacing: -.02em;
+      text-transform: uppercase;
+    }
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; }
+    .filter {
+      padding: 10px 14px;
+      border: 1px solid #d8d9d0;
+      border-radius: 2px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .filter.active, .filter:hover {
+      border-color: var(--ink);
+      background: var(--ink);
+      color: white;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .product-card { min-width: 0; }
+    .product-image {
+      position: relative;
+      height: 285px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background: #e9eae3;
+    }
+    .product-image::before {
+      content: "";
+      position: absolute;
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      background: #dfe4cd;
+    }
+    .product-image.orange { background: #efe8dc; }
+    .product-image.orange::before { background: #e7d6b9; }
+    .product-image.blue { background: #e2e8e7; }
+    .product-image.blue::before { background: #cbdcda; }
+    .product-image.pink { background: #eee5e2; }
+    .product-image.pink::before { background: #e4d0ca; }
+    .product-image.purple { background: #e8e4ed; }
+    .product-image.purple::before { background: #d6cde1; }
+    .product-image.yellow { background: #ecebdc; }
+    .product-image.yellow::before { background: #dfdfbd; }
+
+    .mini-tub {
+      position: relative;
+      z-index: 1;
+      width: 128px;
+      height: 180px;
+      border-radius: 13px 13px 10px 10px;
+      background: linear-gradient(90deg, #24271f, #515347 20%, #30332a 80%, #1c1e19);
+      box-shadow: 13px 17px 25px #24271f30;
+      transform: rotate(-4deg);
+    }
+    .mini-tub::before {
+      content: "";
+      position: absolute;
+      top: -11px;
+      left: -3px;
+      width: calc(100% + 6px);
+      height: 17px;
+      border-radius: 5px;
+      background: linear-gradient(#66695b, #2a2c24);
+    }
+    .mini-label {
+      position: absolute;
+      top: 48px;
+      right: 0;
+      left: 0;
+      height: 83px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: var(--lime);
+      color: var(--ink);
+      text-align: center;
+    }
+    .mini-label.blue { background: #a7d7d0; }
+    .mini-label.orange { background: #edb874; }
+    .mini-label.pink { background: #e6a9a0; }
+    .mini-label.purple { background: #c7b4df; }
+    .mini-label.yellow { background: #e8d86e; }
+    .mini-label strong { font: 900 29px/.86 var(--display); }
+    .mini-label small { margin-top: 5px; font-size: 7px; font-weight: 800; letter-spacing: .1em; }
+
+    .badge {
+      position: absolute;
+      top: 13px;
+      left: 13px;
+      z-index: 2;
+      padding: 7px 9px;
+      background: var(--lime);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .product-info { padding: 15px 2px 0; }
+    .category {
+      margin-bottom: 7px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .product-info h3 {
+      margin-bottom: 8px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .rating { color: #7b9816; font-size: 11px; letter-spacing: .04em; }
+    .rating span { color: var(--muted); letter-spacing: 0; }
+    .product-bottom {
+      margin-top: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .price { font-size: 15px; font-weight: 800; }
+    .add-button {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--ink);
+      border-radius: 50%;
+      background: transparent;
+      font-size: 20px;
+      line-height: 1;
+    }
+    .add-button:hover { background: var(--ink); color: white; }
+
+    .feature {
+      margin: 0 6%;
+      padding: 58px 7%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 40px;
+      background: var(--lime);
+    }
+    .feature h2 { max-width: 520px; }
+    .feature p {
+      max-width: 420px;
+      margin: 18px 0 22px;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .feature .button { background: var(--ink); color: white; }
+    .feature-art {
+      min-height: 280px;
+      display: grid;
+      place-items: center;
+      background: #171914;
+      overflow: hidden;
+    }
+    .feature-art strong {
+      color: var(--lime);
+      font: 900 clamp(65px, 12vw, 150px)/.75 var(--display);
+      letter-spacing: -.06em;
+      transform: rotate(-8deg);
+    }
+
+    .reviews {
+      padding: 85px 7%;
+      text-align: center;
+    }
+    .reviews .eyebrow { justify-content: center; color: #829e1c; }
+    .quote {
+      max-width: 760px;
+      margin: 26px auto 17px;
+      font: 600 clamp(23px, 3.2vw, 37px)/1.25 var(--display);
+    }
+    .reviewer {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .newsletter {
+      padding: 55px 7%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+      background: #e9eae3;
+    }
+    .newsletter h2 { font-size: 43px; }
+    .newsletter p { margin: 8px 0 0; color: var(--muted); font-size: 13px; }
+    .signup { display: flex; width: min(100%, 420px); }
+    .signup input {
+      width: 100%;
+      min-width: 0;
+      padding: 14px;
+      border: 1px solid #cbcdc2;
+      border-right: 0;
+      border-radius: 0;
+      background: var(--paper);
+      font: 13px var(--body);
+    }
+    .signup button {
+      padding: 0 18px;
+      border: 0;
+      background: var(--ink);
+      color: white;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    footer {
+      padding: 35px 7%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      background: var(--ink);
+      color: white;
+    }
+    footer .logo { font-size: 27px; }
+    footer p { margin: 0; color: #b2b4ab; font-size: 11px; }
+    .footer-links { display: flex; gap: 18px; color: #d2d3cc; font-size: 11px; }
+
+    .overlay {
+      position: fixed;
+      z-index: 10;
+      inset: 0;
+      visibility: hidden;
+      background: #0008;
+      opacity: 0;
+      transition: .25s;
+    }
+    .overlay.open { visibility: visible; opacity: 1; }
+    .cart-drawer {
+      position: fixed;
+      z-index: 11;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: min(420px, 100%);
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      background: var(--paper);
+      transform: translateX(100%);
+      transition: transform .3s;
+    }
+    .cart-drawer.open { transform: translateX(0); }
+    .cart-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    .cart-head h2 { font-size: 34px; }
+    .close-cart {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--line);
+      background: white;
+      font-size: 21px;
+    }
+    .cart-items { flex: 1; overflow: auto; }
+    .cart-row {
+      padding: 17px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+    }
+    .cart-row small { display: block; margin-top: 5px; color: var(--muted); }
+    .cart-row button {
+      border: 0;
+      background: transparent;
+      color: #777;
+      font-size: 18px;
+    }
+    .cart-foot { padding-top: 18px; border-top: 1px solid var(--line); }
+    .cart-total { display: flex; justify-content: space-between; margin-bottom: 17px; font-weight: 800; }
+    .cart-foot .button { width: 100%; }
+    .empty-cart { padding: 28px 0; color: var(--muted); font-size: 14px; }
+
+    @media (max-width: 850px) {
+      header { padding: 0 5%; }
+      nav { gap: 16px; }
+      .hero-copy { padding-left: 8%; }
+      .products { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 27px 16px; }
+      .product-image { height: 270px; }
+      .trust-bar { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      header { height: 66px; }
+      nav { display: none; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-copy { padding: 62px 7% 42px; }
+      .hero-art { min-height: 390px; }
+      .hero-art::before { font-size: 150px; }
+      .tub { transform: translate(-50%, -47%) rotate(5deg) scale(.85); }
+      .trust-bar { padding: 18px 4%; gap: 17px 5px; }
+      .trust-item { font-size: 9px; }
+      .section { padding: 65px 5%; }
+      .section-heading { display: block; }
+      .filters { margin-top: 22px; }
+      .filter { padding: 9px 11px; }
+      .product-image { height: 220px; }
+      .mini-tub { transform: scale(.82) rotate(-4deg); }
+      .feature { margin: 0 4%; padding: 37px 7%; grid-template-columns: 1fr; gap: 28px; }
+      .feature-art { min-height: 190px; }
+      .newsletter { padding: 42px 6%; align-items: flex-start; flex-direction: column; }
+      .newsletter h2 { font-size: 38px; }
+      .signup { width: 100%; }
+      footer { padding: 30px 6%; align-items: flex-start; flex-direction: column; }
+    }
+    @media (max-width: 370px) {
+      .product-image { height: 185px; }
+      .mini-tub { transform: scale(.72) rotate(-4deg); }
+      .trust-item { font-size: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="announcement">Free shipping on orders over $75 · Built for the work</div>
+
+  <header>
+    <a class="logo" href="#" aria-label="Forge home">FORGE<span>.</span></a>
+    <nav aria-label="Main navigation">
+      <a href="#shop">Shop</a>
+      <a href="#standards">Our standard</a>
+      <a href="#reviews">Reviews</a>
+    </nav>
+    <button class="cart-button" id="openCart" aria-label="Open shopping cart">BAG (<span id="cartCount">0</span>)</button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Made for the committed</p>
+        <h1>Earn every<br><span>rep.</span></h1>
+        <p>Training doesn’t come with shortcuts. Your nutrition shouldn’t either. Meet no-nonsense essentials made to move with you.</p>
+        <a class="button" href="#shop">Shop best sellers <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="hero-art" role="img" aria-label="Illustration of a Forge performance supplement tub">
+        <div class="tub">
+          <div class="tub-lid"></div>
+          <div class="tub-label">
+            <small>FORGE PERFORMANCE</small>
+            <strong>WHEY<br>PRO</strong>
+            <span>24G PROTEIN · VANILLA</span>
+            <em>BUILT FOR EVERYDAY ATHLETES</em>
+          </div>
+        </div>
+        <div class="hero-stamp">TRAIN<br>HARD<br>REPEAT</div>
+      </div>
+    </section>
+
+    <section class="trust-bar" aria-label="Store benefits">
+      <div class="trust-item"><span class="trust-icon">✳</span> Quality-first ingredients</div>
+      <div class="trust-item"><span class="trust-icon">↗</span> Free shipping over $75</div>
+      <div class="trust-item"><span class="trust-icon">✓</span> Straightforward formulas</div>
+      <div class="trust-item"><span class="trust-icon">♡</span> 30-day satisfaction promise</div>
+    </section>
+
+    <section class="section" id="shop">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Your next session starts here</p>
+          <h2>Shop the stack</h2>
+        </div>
+        <div class="filters" aria-label="Filter products">
+          <button class="filter active" data-filter="all">All</button>
+          <button class="filter" data-filter="protein">Protein</button>
+          <button class="filter" data-filter="performance">Performance</button>
+          <button class="filter" data-filter="recovery">Recovery</button>
+        </div>
+      </div>
+
+      <div class="products">
+        <article class="product-card" data-category="protein">
+          <div class="product-image">
+            <span class="badge">Best seller</span>
+            <div class="mini-tub"><div class="mini-label"><strong>WHEY<br>PRO</strong><small>VANILLA · 24G PROTEIN</small></div></div>
+          </div>
+          <div class="product-info">
+            <div class="category">Protein</div>
+            <h3>Daily Whey Protein</h3>
+            <div class="rating">★★★★★ <span>(128 reviews)</span></div>
+            <div class="product-bottom"><span class="price">$39.00</span><button class="add-button" aria-label="Add Daily Whey Protein to cart" data-name="Daily Whey Protein" data-price="39">+</button></div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="performance">
+          <div class="product-image orange">
+            <span class="badge">Fan favorite</span>
+            <div class="mini-tub"><div class="mini-label orange"><strong>PRE<br>WORK</strong><small>CITRUS · 30 SERVINGS</small></div></div>
+          </div>
+          <div class="product-info">
+            <div class="category">Performance</div>
+            <h3>Pre-Workout Focus</h3>
+            <div class="rating">★★★★★ <span>(94 reviews)</span></div>
+            <div class="product-bottom"><span class="price">$34.00</span><button class="add-button" aria-label="Add Pre-Workout Focus to cart" data-name="Pre-Workout Focus" data-price="34">+</button></div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="performance">
+          <div class="product-image blue">
+            <div class="mini-tub"><div class="mini-label blue"><strong>PURE<br>CREATINE</strong><small>UNFLAVORED · 60 SERVINGS</small></div></div>
+          </div>
+          <div class="product-info">
+            <div class="category">Performance</div>
+            <h3>Creatine Monohydrate</h3>
+            <div class="rating">★★★★★ <span>(76 reviews)</span></div>
+            <div class="product-bottom"><span class="price">$24.00</span><button class="add-button" aria-label="Add Creatine Monohydrate to cart" data-name="Creatine Monohydrate" data-price="24">+</button></div>
+          </div>
+        </article>
+
+        <article class="product-card" data-category="recovery">
+          <div class="product-image pink">
+            <div class="mini-tub"><div class="mini-label pink"><strong>RECOVER<br>+ RESTORE</strong><small>BERRY · 30 SERVINGS</small></div></div>
+          </div>
+          <div class="product-info">
+            <div class="category">Recovery</div>
+            <h3>Recovery Aminos</h3>
+            <div class="rating">★★★★☆ <span>(52 reviews)</span></div>
+            <div class="product-bottom"><span class="price">$29.00</span><button class="add-button" aria-label="Add Recovery Aminos to cart" data-name="Recovery Aminos" data-price="29">+</button></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="feature" id="standards">
+      <div>
+        <p class="eyebrow">No mystery ingredients</p>
+        <h2>Only what earns its place.</h2>
+        <p>Clear labels. Useful formulas. No overcomplicated stacks. We make it easy to know what’s in your routine and why it’s there.</p>
+        <a class="button" href="#shop">Find your essentials <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="feature-art" aria-label="Forge brand graphic"><strong>NO<br>FLUFF.</strong></div>
+    </section>
+
+    <section class="reviews" id="reviews">
+      <p class="eyebrow">From the training floor</p>
+      <div class="quote">“Finally, a protein that tastes great, mixes easily, and doesn’t make my routine feel complicated.”</div>
+      <div class="reviewer">Jordan R. · Verified customer · ★★★★★</div>
+    </section>
+
+    <section class="newsletter">
+      <div>
+        <h2>Get in the mix.</h2>
+        <p>Product drops, training notes, and 10% off your first order.</p>
+      </div>
+      <form class="signup" id="signupForm">
+        <input type="email" placeholder="Your email address" aria-label="Your email address" required />
+        <button type="submit">Get 10% off</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <a class="logo" href="#">FORGE<span>.</span></a>
+    <p>Train with intention. © <span id="year"></span> FORGE Nutrition.</p>
+    <div class="footer-links"><a href="#shop">Shop</a><a href="#standards">Our standard</a><a href="#reviews">Reviews</a></div>
+  </footer>
+
+  <div class="overlay" id="overlay"></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping cart" aria-hidden="true">
+    <div class="cart-head">
+      <h2>Your bag</h2>
+      <button class="close-cart" id="closeCart" aria-label="Close shopping cart">×</button>
+    </div>
+    <div class="cart-items" id="cartItems"><p class="empty-cart">Your bag is looking light. Add something good.</p></div>
+    <div class="cart-foot">
+      <div class="cart-total"><span>Subtotal</span><span id="cartTotal">$0.00</span></div>
+      <button class="button" id="checkoutButton">Checkout <span aria-hidden="true">↗</span></button>
+    </div>
+  </aside>
+
+  <script>
+    const cart = [];
+    const drawer = document.getElementById("cartDrawer");
+    const overlay = document.getElementById("overlay");
+    const cartItems = document.getElementById("cartItems");
+
+    function openCart() {
+      drawer.classList.add("open");
+      overlay.classList.add("open");
+      drawer.setAttribute("aria-hidden", "false");
+    }
+
+    function closeCart() {
+      drawer.classList.remove("open");
+      overlay.classList.remove("open");
+      drawer.setAttribute("aria-hidden", "true");
+    }
+
+    function renderCart() {
+      const count = cart.reduce((sum, item) => sum + item.qty, 0);
+      const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      document.getElementById("cartCount").textContent = count;
+      document.getElementById("cartTotal").textContent = `$${total.toFixed(2)}`;
+
+      if (!cart.length) {
+        cartItems.innerHTML = '<p class="empty-cart">Your bag is looking light. Add something good.</p>';
+        return;
+      }
+
+      cartItems.innerHTML = cart.map((item, index) => `
+        <div class="cart-row">
+          <div>${item.name}<small>Qty: ${item.qty} · $${item.price.toFixed(2)} each</small></div>
+          <button data-remove="${index}" aria-label="Remove ${item.name}">×</button>
+        </div>
+      `).join("");
+
+      cartItems.querySelectorAll("[data-remove]").forEach(button => {
+        button.addEventListener("click", () => {
+          cart.splice(Number(button.dataset.remove), 1);
+          renderCart();
+        });
+      });
+    }
+
+    document.querySelectorAll(".add-button").forEach(button => {
+      button.addEventListener("click", () => {
+        const name = button.dataset.name;
+        const price = Number(button.dataset.price);
+        const existing = cart.find(item => item.name === name);
+        if (existing) existing.qty++;
+        else cart.push({ name, price, qty: 1 });
+        renderCart();
+        openCart();
+      });
+    });
+
+    document.getElementById("openCart").addEventListener("click", openCart);
+    document.getElementById("closeCart").addEventListener("click", closeCart);
+    overlay.addEventListener("click", closeCart);
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closeCart();
+    });
+
+    document.querySelectorAll(".filter").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelector(".filter.active").classList.remove("active");
+        button.classList.add("active");
+        document.querySelectorAll(".product-card").forEach(card => {
+          card.hidden = button.dataset.filter !== "all" && card.dataset.category !== button.dataset.filter;
+        });
+      });
+    });
+
+    document.getElementById("signupForm").addEventListener("submit", event => {
+      event.preventDefault();
+      alert("Thanks for signing up! Connect this form to your email platform to collect subscribers.");
+      event.target.reset();
+    });
+
+    document.getElementById("checkoutButton").addEventListener("click", () => {
+      alert("Connect a payment provider to enable checkout.");
+    });
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
